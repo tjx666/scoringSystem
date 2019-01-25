@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {View, StyleSheet} from 'react-native';
-import AppContainer from './src/router';
-import WelcomePage from './src/pages/WelcomePage';
+import AppContainer from './router';
 
 export default class App extends Component {
     constructor(props) {
@@ -11,10 +10,7 @@ export default class App extends Component {
     }
 
     render() {
-        return <View style={styles.app}>
-            {/* <AppContainer/> */}
-            <WelcomePage/>
-        </View>
+        return <AppContainer/>;
     }
 }
 

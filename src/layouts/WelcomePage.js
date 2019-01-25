@@ -1,14 +1,20 @@
-import React, {Component} from 'react';
-import {Text, View, Image, StyleSheet} from 'react-native';
+import React, { Component } from 'react';
+import { Text, View, Image, StyleSheet } from 'react-native';
 import CopyRight from '../components/CopyRight';
 
 export default class WelcomePage extends Component {
+    componentDidMount() {
+        setTimeout(__ => {
+            this.props.navigation.replace('InputFirmData')
+        }, 1500);
+    }
+
     render() {
         return (
             <View style={styles.welcomePage}>
                 <Text style={styles.title}>南昌高新区企业财务指标评分系统</Text>
-                <Image style={styles.logo} source={require('../assets/image/welcome-page.png')}/>
-                <CopyRight/>
+                <Image style={styles.logo} source={require('../assets/image/welcome-page.png')} />
+                <CopyRight />
             </View>
         )
     }
