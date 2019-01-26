@@ -7,10 +7,13 @@ const AppNavigator = createStackNavigator({
         screen: WelcomePage,
         navigationOptions: () => ({
             header: null
-          }),
+        }),
     },
     InputFirmData: {
-        screen: InputFirmData
+        screen: InputFirmData,
+        navigationOptions: () => ({
+            header: null
+        }),
     }
 }, { initialRouteName: 'WelcomePage' });
 

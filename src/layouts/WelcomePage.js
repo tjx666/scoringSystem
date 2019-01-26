@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, Image, StyleSheet } from 'react-native';
-import CopyRight from '../components/CopyRight';
+import Copyright from '../components/Copyright';
 
 export default class WelcomePage extends Component {
     componentDidMount() {
@@ -14,7 +14,7 @@ export default class WelcomePage extends Component {
             <View style={styles.welcomePage}>
                 <Text style={styles.title}>南昌高新区企业财务指标评分系统</Text>
                 <Image style={styles.logo} source={require('../assets/image/welcome-page.png')} />
-                <CopyRight />
+                <Copyright />
             </View>
         )
     }
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#0099BB',
+        backgroundColor: '#33CCCC',
     },
     title: {
         fontWeight: "900",
