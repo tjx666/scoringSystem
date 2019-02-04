@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TextInput, StyleSheet, ScrollView, SectionList } from 'react-native';
+import { Text, View, TextInput, StyleSheet, SectionList } from 'react-native';
 import DivideLine from '../components/DivideLine';
 import Copyright from '../components/Copyright';
 
@@ -40,37 +40,25 @@ export default class InputFirmData extends Component {
             data: [
                 { littleCategory: '净利润现金比率' },
             ]
-        },
-        {
-            bigCategory: '成长性分析',
-            data: [
-                { littleCategory: '营业收入增长率' },
-                { littleCategory: '净利润增长率' },
-            ]
-        },
-        {
-            bigCategory: '现金流量分析',
-            data: [
-                { littleCategory: '净利润现金比率' },
-            ]
-        },
-        {
-            bigCategory: '成长性分析',
-            data: [
-                { littleCategory: '营业收入增长率' },
-                { littleCategory: '净利润增长率' },
-            ]
-        },
-        {
-            bigCategory: '现金流量分析',
-            data: [
-                { littleCategory: '净利润现金比率' },
-            ]
-        },
+        }
     ]
 
+    render() {
+        return (
+            <SectionList
+                contentContainerStyle={styles.inputFirmData}
+                sections={InputFirmData.sectionListData}
+                renderItem={this._renderLittleCategoryItem}
+                renderSectionHeader={this._renderBigCategoryHeader}
+                ListHeaderComponent={<Text style={styles.pageTitle}>请输入以下财务指标</Text>}
+                ListFooterComponent={Copyright}
+                keyExtractor={item => item.littleCategory}
+            />
+        )
+    }
+
     _renderBigCategoryHeader = ({ section }) => (
-        <View>
+        <View style={styles.sectionHeader}>
             <Text style={styles.bigCategoryTitle}>{section.bigCategory}</Text>
             <DivideLine style={styles.sectionHeaderDivider} />
         </View>
@@ -79,47 +67,28 @@ export default class InputFirmData extends Component {
     _renderLittleCategoryItem = ({ item }) => {
         return (
             <View style={styles.littleCategoryItem}>
-                <Text style={{ fontSize: 16 }}>{`${item.littleCategory}: `}</Text>
+                <Text style={styles.itemDesc}>{`${item.littleCategory}: `}</Text>
                 <TextInput
-                    allowFontScaling={true}
-                    autoFocus={item.littleCategory === '流动比率'}
-                    clearButtonMode='while-editing'
-                    enablesReturnKeyAutomatically={true}
-                    keyboardType='default'
-                    maxLength={8}
-                    multiline={false}
-                    selectionColor='blue'
-                    placeholder='placeholder'
-                ></TextInput>
+                    style={styles.itemInput}
+                />
             </View>
-        )
-    }
-
-    render() {
-        return (
-            <SectionList
-                style={styles.inputFirmData}
-                sections={InputFirmData.sectionListData}
-                renderSectionHeader={this._renderBigCategoryHeader}
-                renderItem={this._renderLittleCategoryItem}
-                ListHeaderComponent={<Text style={styles.pageTitle}>请输入以下财务指标</Text>}
-                ListFooterComponent={Copyright}
-                keyExtractor={item => item.littleCategory}
-            />
         )
     }
 }
 
 const styles = StyleSheet.create({
     inputFirmData: {
+        flex: 1,
         backgroundColor: '#F9F7E8',
     },
     pageTitle: {
-        marginTop: 50,
-        marginBottom: 5,
+        marginTop: 30,
         textAlign: 'center',
         fontSize: 24,
         fontWeight: '900',
+    },
+    sectionHeader: {
+        marginTop: 10,
     },
     bigCategoryTitle: {
         marginTop: 20,
@@ -128,17 +97,23 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     sectionHeaderDivider: {
-        marginBottom: 10,
-        borderBottomColor: 'rgba(128, 128, 128, 0.1)'
+        marginBottom: 5,
+        borderBottomColor: 'rgba(128, 128, 128, 0.4)'
     },
     littleCategoryItem: {
-        height: 38,
-        marginLeft: 16,
+        height: 40,
+        paddingLeft: 16,
+        paddingRight: 50,
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'flex-end'
     },
-    input: {
+    itemDesc: {
+        fontSize: 16
+    },
+    itemInput: {
         flex: 1,
+        borderBottomWidth: 1,
+        borderBottomColor: 'gray',
     }
 });
