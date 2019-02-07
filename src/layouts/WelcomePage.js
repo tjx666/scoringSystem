@@ -6,7 +6,7 @@ export default class WelcomePage extends Component {
     componentDidMount() {
         setTimeout(__ => {
             this.props.navigation.replace('InputFirmData')
-        }, 500);
+        }, 1500);
     }
 
     render() {
