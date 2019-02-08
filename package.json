@@ -4,20 +4,20 @@
   "private": true,
   "scripts": {
     "start": "react-native run-android",
-    "old-start": "node node_modules/react-native/local-cli/cli.js start",
+    "oldstart": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
   "dependencies": {
-    "eslint": "^5.13.0",
     "react": "16.6.3",
-    "react-native": "0.58.0"
+    "react-native": "0.58.4",
+    "react-navigation": "^3.1.5"
   },
   "devDependencies": {
     "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "23.6.0",
-    "jest": "23.6.0",
+    "babel-jest": "24.1.0",
+    "jest": "24.1.0",
     "metro-react-native-babel-preset": "0.51.1",
-    "react-navigation": "^3.0.9",
+    "react-native-gesture-handler": "^1.0.15",
     "react-test-renderer": "16.6.3"
   },
   "jest": {

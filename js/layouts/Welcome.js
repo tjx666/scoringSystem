@@ -13,7 +13,7 @@ export default class WelcomePage extends Component {
         return (
             <View style={styles.welcomePage}>
                 <Text style={styles.title}>南昌高新区企业财务指标评分系统</Text>
-                <Image style={styles.logo} source={require('../assets/image/welcome-page.png')} />
+                <Image style={styles.logo} source={require('../common/image/welcom-page.png')} />
                 <Copyright />
             </View>
         )

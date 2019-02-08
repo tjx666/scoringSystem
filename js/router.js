@@ -1,10 +1,10 @@
 import { createAppContainer, createStackNavigator } from "react-navigation";
-import WelcomePage from "./layouts/WelcomePage";
+import Welcome from "./layouts/Welcome";
 import InputFirmData from './layouts/InputFirmData';
 
 const AppNavigator = createStackNavigator({
-    WelcomePage: {
-        screen: WelcomePage,
+    Welcome: {
+        screen: Welcome,
         navigationOptions: () => ({
             header: null
         }),
@@ -15,6 +15,6 @@ const AppNavigator = createStackNavigator({
             header: null
         }),
     }
-}, { initialRouteName: 'WelcomePage' });
+}, { initialRouteName: 'Welcome' });
 
 export default createAppContainer(AppNavigator);

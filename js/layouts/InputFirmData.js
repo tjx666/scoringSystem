@@ -1,16 +1,42 @@
 import React, { Component } from 'react';
 import { Text, StyleSheet, View, ScrollView, TextInput } from 'react-native';
-import Divider from '../components/DivideLine';
+import Divider from '../components/Divider';
 import Copyright from '../components/Copyright';
 
 class InputItem extends Component {
     render() {
         return (
             <View style={styles.inputItem}>
-                <Text style={styles.itemDesc}>{`${this.props.littleCategory}: `}</Text>
+                <Text style={styles.itemDesc}>{`${this.props.littleCategory}:  `}</Text>
                 <TextInput
                     style={styles.itemInput}
                 />
+            </View>
+        )
+    }
+}
+
+class InputSection extends Component {
+    _renderItems = items => {
+        return items.map(littleCategory => {
+            return (
+                <InputItem
+                    key={littleCategory}
+                    littleCategory={littleCategory}
+                />
+            )
+        });
+    }
+
+    render() {
+        const { sectionData } = this.props;
+        return (
+            <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                    <Text style={styles.bigCategoryTitle}>{sectionData.bigCategory}</Text>
+                    <Divider style={styles.sectionHeaderDivider} />
+                </View>
+                {this._renderItems(sectionData.items)}
             </View>
         )
     }
@@ -73,43 +99,23 @@ export default class InputFirmData extends Component {
             <ScrollView
                 contentContainerStyle={styles.container}
             >
-                {this.renderTitle()}
-                {this.renderSectionList(InputFirmData.sectionListData)}
-                <Copyright/>
+                <Text style={styles.title}>请输入以下财务指标</Text>
+                {this._renderSectionList(InputFirmData.sectionListData)}
+                <Copyright />
             </ScrollView>
         )
     }
 
-    renderTitle = __ => <Text style={styles.title}>请输入以下财务指标</Text>
-
-    renderSectionHeader = bigCategory => (
-        <View style={styles.sectionHeader}>
-            <Text style={styles.bigCategoryTitle}>{bigCategory}</Text>
-            <Divider style={styles.sectionHeaderDivider} />
-        </View>
-    )
-
-    renderItems = items => {
-        return items.map(littleCategory => {
-            return (
-                <InputItem
-                    key={littleCategory}
-                    littleCategory={littleCategory}
-                />
-            )
-        });
-    }
-
-    renderSection = sectionData => (
-        <View style={styles.section} key={sectionData.bigCategory}>
-            {this.renderSectionHeader(sectionData.bigCategoryTitle)}
-            {this.renderItems(sectionData.items)}
-        </View>
-    )
-
-    renderSectionList = sectionListData => {
+    _renderSectionList = sectionListData => {
         return <View style={styles.sectionList}>
-            {sectionListData.map(sectionData => this.renderSection(sectionData))}
+            {
+                sectionListData.map(sectionData => (
+                    <InputSection
+                        key={sectionData.bigCategory}
+                        sectionData={sectionData}
+                    />
+                ))
+            }
         </View>
     }
 }
@@ -117,41 +123,51 @@ export default class InputFirmData extends Component {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#F9F7E8',
+        paddingBottom: 10
     },
     title: {
         marginTop: 30,
+        marginBottom: 10,
         textAlign: 'center',
         fontSize: 24,
         fontWeight: '900',
+        color: 'black'
     },
-    // item
+    sectionList: {
+        marginBottom: 20
+    },
+    section: {
+        paddingBottom: 30
+    },
+    sectionHeader: {
+        marginBottom: -5
+    },
+    bigCategoryTitle: {
+        paddingVertical: 10,
+        textAlign: 'center',
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#444444'
+    },
+    sectionHeaderDivider: {
+        marginBottom: 5,
+        borderBottomColor: 'rgba(128, 128, 128, 0.4)'
+    },
     inputItem: {
         height: 40,
         paddingLeft: 16,
         paddingRight: 50,
         flexDirection: 'row',
-        alignItems: 'flex-end'
+        alignItems: 'center'
     },
     itemDesc: {
-        fontSize: 16
+        fontSize: 18,
+        color: '#555555'
     },
     itemInput: {
         flex: 1,
         borderBottomWidth: 1,
         borderBottomColor: 'gray',
-        fontSize: 14,
-    },
-    sectionList: {
-
-    },
-    section: {
-        
-    },
-    sectionHeader: {
-        marginTop: 10,
-    },
-    sectionHeaderDivider: {
-        marginBottom: 5,
-        borderBottomColor: 'rgba(128, 128, 128, 0.4)'
+        fontSize: 18,
     },
 })
