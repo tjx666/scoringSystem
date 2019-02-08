@@ -1,210 +1,121 @@
 import React, { Component } from 'react';
-import { Text, View, TextInput, StyleSheet, SectionList } from 'react-native';
-import DivideLine from '../components/DivideLine';
+import { Text, StyleSheet, View, ScrollView, TextInput } from 'react-native';
+import Divider from '../components/DivideLine';
 import Copyright from '../components/Copyright';
 
-class ListItem extends Component {
-    _handleTextChange = text => {
-        const data = {
-            value: Number.parseFloat(text),
-            bigCategory: this.props.section,
-            index: this.props.index
-        }
-        this.props.onChangeText(data);
-    }
-
+class InputItem extends Component {
     render() {
         return (
-            <View style={styles.littleCategoryItem}>
+            <View style={styles.inputItem}>
                 <Text style={styles.itemDesc}>{`${this.props.littleCategory}: `}</Text>
                 <TextInput
                     style={styles.itemInput}
-                    onChangeText={this._handleTextChange}
                 />
             </View>
         )
     }
 }
 
-
 export default class InputFirmData extends Component {
     static sectionListData = [
         {
             bigCategory: '偿债能力',
-            data: [
-                { littleCategory: '流动比率' },
-                { littleCategory: '资产负债率' },
+            items: [
+                '流动比率',
+                '资产负债率'
             ]
         },
         {
             bigCategory: '营运能力',
-            data: [
-                { littleCategory: '存货周期率' },
-                { littleCategory: '应收账款周转率' },
-                { littleCategory: '总资产周转率' }
+            items: [
+                '存货周期率',
+                '应收账款周转率',
+                '总资产周转率'
             ]
         },
         {
             bigCategory: '盈利能力',
-            data: [
-                { littleCategory: '毛利率' },
-                { littleCategory: '净资产收益率' },
+            items: [
+                '毛利率',
+                '净资产收益率'
             ]
         },
         {
             bigCategory: '成长性分析',
-            data: [
-                { littleCategory: '营业收入增长率' },
-                { littleCategory: '净利润增长率' },
+            items: [
+                '营业收入增长率',
+                '净利润增长率'
             ]
         },
         {
             bigCategory: '现金流量分析',
-            data: [
-                { littleCategory: '净利润现金比率' },
+            items: [
+                '净利润现金比率'
+            ]
+        },
+        {
+            bigCategory: '成长性分析',
+            items: [
+                '营业收入增长率',
+                '净利润增长率'
+            ]
+        },
+        {
+            bigCategory: '现金流量分析',
+            items: [
+                '净利润现金比率'
             ]
         }
     ]
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            currentRatio: 0,
-            assetsAndLiabilities: 0,
-            inventoryCycleRate: 0,
-            accountReceivableCycleRate: 0,
-            totalAssetTurnover: 0,
-            grossProfitRate: 0,
-            roe: 0,
-            operationIncomeGrowthRate: 0,
-            netProfitGrowthRate: 0,
-            netProfitCashRatio: 0,
-        }
-    }
-
-    _handleInputTextChange = data => {
-        switch (data.bigCategory) {
-            case '偿债能力': {
-                switch (data.index) {
-                    case 0: {
-                        this.setState({
-                            ...this.state,
-                            currentRatio: data.value
-                        })
-                    }
-                    case 1: {
-                        this.setState({
-                            ...this.state,
-                            assetsAndLiabilities: data.value
-                        })
-                    }
-                }
-            }
-            case '营运能力': {
-                switch (data.index) {
-                    case 0: {
-                        this.setState({
-                            ...this.state,
-                            inventoryCycleRate: data.value
-                        })
-                    }
-                    case 1: {
-                        this.setState({
-                            ...this.state,
-                            accountReceivableCycleRate: data.value
-                        })
-                    }
-                    case 3: {
-                        this.setState({
-                            ...this.state,
-                            totalAssetTurnover: data.value
-                        })
-                    }
-                }
-            }
-            case '盈利能力': {
-                switch (data.index) {
-                    case 0: {
-                        this.setState({
-                            ...this.state,
-                            grossProfitRate: data.value
-                        })
-                    }
-                    case 1: {
-                        this.setState({
-                            ...this.state,
-                            roe: data.value
-                        })
-                    }
-                }
-            }
-            case '成长性分析': {
-                switch (data.index) {
-                    case 0: {
-                        this.setState({
-                            ...this.state,
-                            operationIncomeGrowthRate: data.value
-                        })
-                    }
-                    case 1: {
-                        this.setState({
-                            ...this.state,
-                            netProfitGrowthRate: data.value
-                        })
-                    }
-                }
-            }
-            case '现金流量分析': {
-                switch (data.index) {
-                    case 0: {
-                        this.setState({
-                            ...this.state,
-                            netProfitCashRatio: data.value
-                        })
-                    }
-                }
-            }
-        }
-    }
-
     render() {
         return (
-            <SectionList
+            <ScrollView
                 contentContainerStyle={styles.container}
-                sections={InputFirmData.sectionListData}
-                renderItem={this._renderItem}
-                renderSectionHeader={this._renderSectionHeader}
-                ListHeaderComponent={this._renderListHeader}
-                ListFooterComponent={Copyright}
-                keyExtractor={item => item.littleCategory}
-            />
+            >
+                {this.renderTitle()}
+                {this.renderSectionList(InputFirmData.sectionListData)}
+                <Copyright/>
+            </ScrollView>
         )
     }
 
-    _renderItem = ({ item, index, section }) => (
-        <ListItem
-            littleCategory={item.littleCategory}
-            onChangeText={this._handleInputTextChange}
-            section={section}
-            index={index}
-        />
-    )
+    renderTitle = __ => <Text style={styles.title}>请输入以下财务指标</Text>
 
-    _renderSectionHeader = ({ section }) => (
+    renderSectionHeader = bigCategory => (
         <View style={styles.sectionHeader}>
-            <Text style={styles.bigCategoryTitle}>{section.bigCategory}</Text>
-            <DivideLine style={styles.sectionHeaderDivider} />
+            <Text style={styles.bigCategoryTitle}>{bigCategory}</Text>
+            <Divider style={styles.sectionHeaderDivider} />
         </View>
     )
 
-    _renderListHeader = __ => (
-        <Text style={styles.title}>请输入以下财务指标</Text>
+    renderItems = items => {
+        return items.map(littleCategory => {
+            return (
+                <InputItem
+                    key={littleCategory}
+                    littleCategory={littleCategory}
+                />
+            )
+        });
+    }
+
+    renderSection = sectionData => (
+        <View style={styles.section} key={sectionData.bigCategory}>
+            {this.renderSectionHeader(sectionData.bigCategoryTitle)}
+            {this.renderItems(sectionData.items)}
+        </View>
     )
+
+    renderSectionList = sectionListData => {
+        return <View style={styles.sectionList}>
+            {sectionListData.map(sectionData => this.renderSection(sectionData))}
+        </View>
+    }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#F9F7E8',
     },
     title: {
@@ -213,20 +124,8 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: '900',
     },
-    sectionHeader: {
-        marginTop: 10,
-    },
-    bigCategoryTitle: {
-        marginTop: 20,
-        marginBottom: 10,
-        textAlign: 'center',
-        fontSize: 18,
-    },
-    sectionHeaderDivider: {
-        marginBottom: 5,
-        borderBottomColor: 'rgba(128, 128, 128, 0.4)'
-    },
-    littleCategoryItem: {
+    // item
+    inputItem: {
         height: 40,
         paddingLeft: 16,
         paddingRight: 50,
@@ -241,5 +140,18 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: 'gray',
         fontSize: 14,
-    }
-});
+    },
+    sectionList: {
+
+    },
+    section: {
+        
+    },
+    sectionHeader: {
+        marginTop: 10,
+    },
+    sectionHeaderDivider: {
+        marginBottom: 5,
+        borderBottomColor: 'rgba(128, 128, 128, 0.4)'
+    },
+})
