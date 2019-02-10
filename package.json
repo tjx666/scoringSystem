@@ -18,7 +18,10 @@
     "jest": "24.1.0",
     "metro-react-native-babel-preset": "0.51.1",
     "react-native-gesture-handler": "^1.0.15",
-    "react-test-renderer": "16.6.3"
+    "react-redux": "^6.0.0",
+    "react-test-renderer": "16.6.3",
+    "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8"
   },
   "jest": {
     "preset": "react-native"

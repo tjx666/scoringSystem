@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View, ScrollView, TextInput } from 'react-native';
+import { Text, StyleSheet, View, ScrollView, TextInput, Button, Assert } from 'react-native';
 import Divider from '../components/Divider';
 import Copyright from '../components/Copyright';
 
@@ -94,6 +94,18 @@ export default class InputFirmData extends Component {
         }
     ]
 
+    _handleSubmit = __ => {
+        Alert.alert(
+            '确定提交吗?',
+            '可以返回修改数据',
+            [
+              {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+              {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ],
+            { cancelable: false }
+          )
+    }
+
     render() {
         return (
             <ScrollView
@@ -101,6 +113,11 @@ export default class InputFirmData extends Component {
             >
                 <Text style={styles.title}>请输入以下财务指标</Text>
                 {this._renderSectionList(InputFirmData.sectionListData)}
+                <Button
+                    onPress={this._handleSubmit}
+                    title="确定"
+                    color="gray"
+                />
                 <Copyright />
             </ScrollView>
         )
