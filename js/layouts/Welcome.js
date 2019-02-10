@@ -5,7 +5,8 @@ import Copyright from '../components/Copyright';
 export default class WelcomePage extends Component {
     componentDidMount() {
         setTimeout(__ => {
-            this.props.navigation.replace('InputFirmData')
+            // this.props.navigation.replace('InputFirmData');
+            this.props.navigation.replace('Charts')
         }, 1500);
     }
 
@@ -13,7 +14,7 @@ export default class WelcomePage extends Component {
         return (
             <View style={styles.welcomePage}>
                 <Text style={styles.title}>南昌高新区企业财务指标评分系统</Text>
-                <Image style={styles.logo} source={require('../common/image/welcom-page.png')} />
+                <Image style={styles.logo} source={require('../common/image/welcome-page.png')} />
                 <Copyright />
             </View>
         )
