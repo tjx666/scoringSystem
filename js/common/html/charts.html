@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>欧菲科技和与其比较的公司的雷达图</title>
+    <script src="../js/echarts.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #ofilm-radar {
+            width: 60vw;
+            height: 40vh;
+        }
+
+        #some-firm-radar {
+            width: 60vw;
+            height: 40vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ofilm-container">
+        <div id="ofilm-radar"></div>
+    </div>
+    <div class="some-firm-container">
+        <div id="some-firm-radar"></div>
+    </div>
+    <script>
+        !function (window) {
+            const ofilmRadarContainer = document.querySelector('#ofilm-radar');
+            const ofilmChart = echarts.init(ofilmRadarContainer, null, { renderer: 'svg' });
+            const option = {
+                title: {
+                    text: '欧菲科技财务指标标准值'
+                },
+                tooltip: {},
+                legend: {
+                    data: ['得分']
+                },
+                radar: {
+                    // shape: 'circle',
+                    name: {
+                        textStyle: {
+                            color: '#fff',
+                            backgroundColor: '#999',
+                            borderRadius: 3,
+                            padding: [3, 5]
+                        }
+                    },
+                    indicator: [
+                        { name: '偿债能力', max: 15 },
+                        { name: '运营能力', max: 15 },
+                        { name: '盈利能力', max: 15 },
+                        { name: '成长性分析', max: 15 },
+                        { name: '现金流量分析', max: 15 },
+                    ]
+                },
+                series: [{
+                    name: '欧菲科技',
+                    type: 'radar',
+                    data: [
+                        {
+                            value: [10, 10, 10, 10, 10],
+                            name: '欧菲科技得分'
+                        }
+                    ]
+                }]
+            };
+
+            ofilmChart.setOption(option);
+        }(window);
+    </script>
+</body>
+
+</html>

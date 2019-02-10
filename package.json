@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "react-native run-android",
-    "oldstart": "node node_modules/react-native/local-cli/cli.js start",
+    "mini": "gulp mini --gulpfile ./scripts/gulpfile.js --cwd .",
+    "oldStart": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
   "dependencies": {
@@ -15,6 +16,10 @@
   "devDependencies": {
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "24.1.0",
+    "gulp": "^4.0.0",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-rename": "^1.4.0",
     "jest": "24.1.0",
     "metro-react-native-babel-preset": "0.51.1",
     "react-native-gesture-handler": "^1.0.15",
