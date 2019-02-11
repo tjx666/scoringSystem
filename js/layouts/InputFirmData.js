@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View, ScrollView, TextInput, Button, Alert } from 'react-native';
+import { Text, StyleSheet, View, ScrollView, TextInput, Alert, Keyboard } from 'react-native';
 import Divider from '../components/Divider';
 import Copyright from '../components/Copyright';
 import Toast from 'react-native-root-toast';
+import Button from 'react-native-button';
 
 const InputFirmContext = React.createContext();
 
@@ -146,6 +147,18 @@ export default class InputFirmData extends Component {
         }
     }
 
+    // componentWillMount() {
+    //     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+    // }
+
+    // componentWillUnmount() {
+    //     this.keyboardDidHideListener.remove();
+    // }
+
+    // _keyboardDidHide() {
+    //     dismissKeyboard();
+    // }
+
     _handleChangeText = (name, newValue) => {
         this.setState({
             ...this.state,
@@ -160,7 +173,7 @@ export default class InputFirmData extends Component {
             }
         }
     }
-    
+
     _handleSubmit = __ => {
         const firmData = this.state;
         // Alert.alert(
@@ -238,6 +251,7 @@ export default class InputFirmData extends Component {
         return (
             <ScrollView
                 contentContainerStyle={styles.container}
+                keyboardShouldPersistTaps={'always'}
             >
                 <Text style={styles.title}>请输入以下财务指标</Text>
                 <InputFirmContext.Provider
@@ -250,10 +264,12 @@ export default class InputFirmData extends Component {
                 </InputFirmContext.Provider>
                 <View style={styles.submitButtonContainer}>
                     <Button
-                        onPress={this._handleSubmit}
-                        title="确定"
-                        color="gray"
-                    />
+                        style={{ fontSize: 20, color: 'white' }}
+                        containerStyle={{ padding: 5, height: 40, overflow: 'hidden', borderRadius: 4, backgroundColor: 'gray' }}
+                        onPress={() => this._handleSubmit()}
+                    >
+                        确定
+                    </Button>
                 </View>
                 <Copyright />
             </ScrollView>
@@ -325,7 +341,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     submitButtonContainer: {
-        width: 100,
+        width: 80,
         marginBottom: 20,
         alignSelf: 'center',
         borderRadius: 50
