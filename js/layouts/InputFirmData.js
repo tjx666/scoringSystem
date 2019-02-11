@@ -174,6 +174,13 @@ export default class InputFirmData extends Component {
         }
     }
 
+    _parseFirmData = (stringFirmData) => {
+        return Object.values(stringFirmData).map(stringValue => {
+            const numberData = Number.parseFloat(stringValue) * 10;
+            return Math.min(numberData, 15);
+        });
+    }
+
     _handleSubmit = __ => {
         const firmData = this.state;
         // Alert.alert(
@@ -231,7 +238,7 @@ export default class InputFirmData extends Component {
                                 });
 
                                 setTimeout(__ => {
-                                    const params = Object.values(this.state).map(stringValue => Number.parseFloat(stringValue));
+                                    const params = this._parseFirmData(this.state);
                                     this.props.navigation.navigate('Charts', params)
                                 }, 500);
                             }
@@ -244,7 +251,7 @@ export default class InputFirmData extends Component {
         }
 
         setTimeout(__ => {
-            const params = Object.values(this.state).map(stringValue => Number.parseFloat(stringValue));
+            const params = this._parseFirmData(this.state);            
             this.props.navigation.navigate('Charts', params);
         }, 500);
     }

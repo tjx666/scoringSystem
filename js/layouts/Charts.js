@@ -1,22 +1,12 @@
 import React, { Component } from 'react'
-import { WebView, StyleSheet, Platform } from 'react-native'
-import Toast from 'react-native-root-toast';
+import { WebView, StyleSheet, Platform, Alert } from 'react-native'
+import Logger from '../utils/log';
+const logger = new Logger();
 
 export default class Charts extends Component {
     _getRadarOptions = __ => {
         const firmData = this.props.navigation.state.params;
-        const value = [
-            firmData.currentRatio,
-            firmData.assetsAndLiabilityRate,
-            firmData.inventoryTurnover,
-            firmData.accountReceivableTurnover,
-            firmData.totalAssetsTurnover,
-            firmData.grossProfitRate,
-            firmData.roe,
-            firmData.operationIncomeGrowthRate,
-            firmData.netProfitGrowthRate,
-            firmData.netProfitCashRatio,
-        ]
+        // logger.debug(firmData);
 
         return {
             title: {
@@ -46,12 +36,18 @@ export default class Charts extends Component {
                 ]
             },
             series: [{
-                name: '欧菲科技',
+                name: '该公司',
                 type: 'radar',
                 data: [
                     {
-                        value,
-                        name: '欧菲科技得分'
+                        value: firmData,
+                        name: '该公司得分',
+                        lineStyle: {
+                            color: 'blue'
+                        },
+                        itemStyle: {
+                            color: 'blue'
+                        }
                     }
                 ]
             }]
@@ -67,6 +63,7 @@ export default class Charts extends Component {
             const container = document.querySelector('#some-firm-radar');
             const chart = echarts.init(container, null, { renderer: 'canvas' });
             chart.setOption(${JSON.stringify(options)});
+            document.querySelector('body > div:nth-child(2) > span.total-score').innerText = '总分: ${totalScore}分'
         }();
         `;
     }
@@ -81,7 +78,7 @@ export default class Charts extends Component {
             <WebView
                 originWhitelist={['*']}
                 source={src}
-                injectedJavaScript ={this._renderRadar()}
+                injectedJavaScript={this._renderRadar()}
             />
         );
     }
