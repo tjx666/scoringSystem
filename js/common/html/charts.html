@@ -59,9 +59,10 @@
     <div class="container">
             <span class="title">该公司</span>
         <div id="some-firm-radar"></div>
+        <span class="total-score">总分: </span>
     </div>
     <script>
-        !function (window) {
+        !function () {
             const ofilmRadarContainer = document.querySelector('#ofilm-radar');
             const ofilmChart = echarts.init(ofilmRadarContainer, null, { renderer: 'canvas' });
             const option = {
@@ -104,7 +105,7 @@
             };
 
             ofilmChart.setOption(option);
-        }(window);
+        }();
     </script>
 </body>
 

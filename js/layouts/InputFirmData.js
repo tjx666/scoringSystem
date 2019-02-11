@@ -231,7 +231,8 @@ export default class InputFirmData extends Component {
                                 });
 
                                 setTimeout(__ => {
-                                    this.props.navigation.navigate('Charts', this.state)
+                                    const params = Object.values(this.state).map(stringValue => Number.parseFloat(stringValue));
+                                    this.props.navigation.navigate('Charts', params)
                                 }, 500);
                             }
                         },
@@ -243,7 +244,8 @@ export default class InputFirmData extends Component {
         }
 
         setTimeout(__ => {
-            this.props.navigation.navigate('Charts', this.state)
+            const params = Object.values(this.state).map(stringValue => Number.parseFloat(stringValue));
+            this.props.navigation.navigate('Charts', params);
         }, 500);
     }
 
@@ -292,7 +294,7 @@ export default class InputFirmData extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#F9F7E8',
+        backgroundColor: 'white',
         paddingBottom: 10
     },
     title: {
@@ -325,8 +327,8 @@ const styles = StyleSheet.create({
     },
     inputItem: {
         height: 40,
-        paddingLeft: 16,
-        paddingRight: 50,
+        paddingLeft: 60,
+        paddingRight: 100,
         flexDirection: 'row',
         alignItems: 'center'
     },
