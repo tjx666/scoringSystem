@@ -5,8 +5,8 @@ import Copyright from '../components/Copyright';
 export default class WelcomePage extends Component {
     componentDidMount() {
         setTimeout(__ => {
-            // this.props.navigation.replace('InputFirmData');
-            this.props.navigation.replace('Charts')
+            this.props.navigation.replace('InputFirmData');
+            // this.props.navigation.navigate('Charts')
         }, 1500);
     }
 

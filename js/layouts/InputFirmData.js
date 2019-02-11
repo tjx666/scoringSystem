@@ -13,13 +13,16 @@ class InputItem extends Component {
                 <Text style={styles.itemDesc}>{`${this.props.desc}:  `}</Text>
                 <InputFirmContext.Consumer>
                     {
-                        onChangeText => (
+                        ({ onChangeText, values }) => (
                             <TextInput
                                 style={styles.itemInput}
-                                onChangeText={newValue => onChangeText(this.props.name, newValue)}
+                                onChangeText={newValue => {
+                                    onChangeText(this.props.name, newValue);
+                                }}
                                 clearButtonMode={'while-editing'}
                                 enablesReturnKeyAutomatically={true}
                                 keyboardType={'numeric'}
+                                value={values[this.props.name]}
                             />
                         )
                     }
@@ -153,64 +156,82 @@ export default class InputFirmData extends Component {
     _getDescOfItem = name => {
         for (const bigCategory of InputFirmData.sectionListData) {
             for (const item of bigCategory.items) {
-                if (item.name = name) return item.desc;
+                if (item.name === name) return item.desc;
             }
         }
     }
-
-    _checkFirmData = FirmData => {
-        return new Promise((resolve, reject) => {
-            for (const [key, value] of Object.entries(FirmData)) {
-                const desc = this._getDescOfItem(key);
-
-                if (!value.trim() === '' && !/^\d+(\.\d+)?$/.test(value)) {
-                    Toast.show(`${desc}的输入值不是一个合法的数字!请修改${desc}!`, {
-                        duration: Toast.durations.SHORT,
-                        position: Toast.positions.BOTTOM,
-                        shadow: true,
-                        animation: true,
-                        hideOnPress: true,
-                        delay: 0,
-                    });
-                    reject(1);
-                }
-            }
-
-            for (const [key, value] of Object.entries(FirmData)) {
-                const desc = this._getDescOfItem(key);
-
-                if (value.trim() === '') {
-                    Alert.alert(
-                        `${desc}项未输入！`,
-                        '继续将视未输入的所有项值为 0，是否继续？',
-                        [
-                            { text: '返回', onPress: () => { reject(2)} },
-                            {
-                                text: '继续', onPress: () => {
-                                    for (const key of firmData) {
-                                        if (firmData[key].trim() === '') {
-                                            firmData[key] = 0;
-                                        }
-                                    }
-                                    resolve(0);
-                                }
-                            },
-                        ],
-                        { cancelable: false }
-                    )
-                }
-            }
-
-            resolve(0);
-        })
-    }
-
+    
     _handleSubmit = __ => {
-        this._checkFirmData().then(__ => {
-            setTimeout(__ => {
-                this.props.navigation.navigate('Charts', this.state)
-            }, 500);
-        });
+        const firmData = this.state;
+        // Alert.alert(
+        //     `FirmData`,
+        //     JSON.stringify(firmData, null, '    '),
+        //     [
+        //         {
+        //             text: '返回', onPress: () => {
+        //             }
+        //         }
+        //     ],
+        //     { cancelable: false }
+        // )
+
+        for (const [key, value] of Object.entries(firmData)) {
+            const desc = this._getDescOfItem(key);
+
+            if (value.trim() !== '' && !/^\d+(\.\d+)?$/.test(value)) {
+                Toast.show(`${desc}的输入值不是一个合法的数字!请修改${desc}!`, {
+                    duration: Toast.durations.SHORT,
+                    position: Toast.positions.BOTTOM,
+                    shadow: true,
+                    animation: true,
+                    hideOnPress: true,
+                    delay: 0,
+                });
+                return;
+            }
+        }
+
+
+        for (const [key, value] of Object.entries(firmData)) {
+            const desc = this._getDescOfItem(key);
+
+            if (value.trim() === '') {
+                Alert.alert(
+                    `${desc}项未输入！`,
+                    '继续将视未输入的所有项值为 0，是否继续？',
+                    [
+                        {
+                            text: '返回', onPress: () => {
+                            }
+                        },
+                        {
+                            text: '继续', onPress: () => {
+                                let updatedState = {};
+                                for (const key in firmData) {
+                                    if (firmData[key].trim() === '') {
+                                        updatedState[key] = '0';
+                                    }
+                                }
+                                this.setState({
+                                    ...this.state,
+                                    ...updatedState
+                                });
+
+                                setTimeout(__ => {
+                                    this.props.navigation.navigate('Charts', this.state)
+                                }, 500);
+                            }
+                        },
+                    ],
+                    { cancelable: false }
+                )
+                return;
+            }
+        }
+
+        setTimeout(__ => {
+            this.props.navigation.navigate('Charts', this.state)
+        }, 500);
     }
 
     render() {
@@ -220,9 +241,10 @@ export default class InputFirmData extends Component {
             >
                 <Text style={styles.title}>请输入以下财务指标</Text>
                 <InputFirmContext.Provider
-                    value={
-                        onChangeText = this._handleChangeText
-                    }
+                    value={{
+                        onChangeText: this._handleChangeText,
+                        values: this.state
+                    }}
                 >
                     {this._renderSectionList(InputFirmData.sectionListData)}
                 </InputFirmContext.Provider>
