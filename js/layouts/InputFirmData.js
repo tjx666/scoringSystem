@@ -249,6 +249,7 @@ export default class InputFirmData extends Component {
     render() {
         return (
             <ScrollView
+                showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.container}
                 keyboardShouldPersistTaps={'always'}
                 keyboardDismissMode="on-drag"
