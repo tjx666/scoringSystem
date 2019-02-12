@@ -6,7 +6,6 @@ const logger = new Logger();
 export default class Charts extends Component {
     _getRadarOptions = __ => {
         const firmData = this.props.navigation.state.params;
-        // logger.debug(firmData);
 
         return {
             title: {

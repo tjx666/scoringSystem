@@ -4,6 +4,9 @@ import Divider from '../components/Divider';
 import Copyright from '../components/Copyright';
 import Toast from 'react-native-root-toast';
 import Button from 'react-native-button';
+import { average, fix } from '../utils/math';
+import Logger from '../utils/log';
+const logger = new Logger();
 
 const InputFirmContext = React.createContext();
 
@@ -24,6 +27,7 @@ class InputItem extends Component {
                                 enablesReturnKeyAutomatically={true}
                                 keyboardType={'numeric'}
                                 value={values[this.props.name]}
+                                selectionColor={'gray'}
                             />
                         )
                     }
@@ -147,18 +151,6 @@ export default class InputFirmData extends Component {
         }
     }
 
-    // componentWillMount() {
-    //     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
-    // }
-
-    // componentWillUnmount() {
-    //     this.keyboardDidHideListener.remove();
-    // }
-
-    // _keyboardDidHide() {
-    //     dismissKeyboard();
-    // }
-
     _handleChangeText = (name, newValue) => {
         this.setState({
             ...this.state,
@@ -175,25 +167,23 @@ export default class InputFirmData extends Component {
     }
 
     _parseFirmData = (stringFirmData) => {
-        return Object.values(stringFirmData).map(stringValue => {
+        const parsedFirmData = Object.values(stringFirmData).map(stringValue => {
             const numberData = Number.parseFloat(stringValue) * 10;
             return Math.min(numberData, 15);
         });
+
+        const params = [
+            parsedFirmData.slice(0, 2),
+            parsedFirmData.slice(2, 5),
+            parsedFirmData.slice(5, 7),
+            parsedFirmData.slice(7, 9),
+            parsedFirmData.slice(9, 10)
+        ].map(param => fix(average(param)))
+        return params;
     }
 
     _handleSubmit = __ => {
         const firmData = this.state;
-        // Alert.alert(
-        //     `FirmData`,
-        //     JSON.stringify(firmData, null, '    '),
-        //     [
-        //         {
-        //             text: '返回', onPress: () => {
-        //             }
-        //         }
-        //     ],
-        //     { cancelable: false }
-        // )
 
         for (const [key, value] of Object.entries(firmData)) {
             const desc = this._getDescOfItem(key);
@@ -251,7 +241,7 @@ export default class InputFirmData extends Component {
         }
 
         setTimeout(__ => {
-            const params = this._parseFirmData(this.state);            
+            const params = this._parseFirmData(this.state);
             this.props.navigation.navigate('Charts', params);
         }, 500);
     }
@@ -261,6 +251,7 @@ export default class InputFirmData extends Component {
             <ScrollView
                 contentContainerStyle={styles.container}
                 keyboardShouldPersistTaps={'always'}
+                keyboardDismissMode="on-drag"
             >
                 <Text style={styles.title}>请输入以下财务指标</Text>
                 <InputFirmContext.Provider
@@ -335,7 +326,7 @@ const styles = StyleSheet.create({
     inputItem: {
         height: 40,
         paddingLeft: 60,
-        paddingRight: 100,
+        paddingRight: 80,
         flexDirection: 'row',
         alignItems: 'center'
     },
