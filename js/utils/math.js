@@ -10,7 +10,7 @@ export function fix(floatNumber, bitCount=2) {
     const floatPattern = /^\d+(\.\d+)?$/;
     const numberStr = `${floatNumber}`;
 
-    if (!floatPattern.test(numberStr)) throw new TypeError(`${floatNumber}不是应该浮点数!`);
+    if (!floatPattern.test(numberStr)) throw new TypeError(`${floatNumber}不是浮点数!`);
 
     if (!numberStr.includes('.')) {
         return floatNumber;

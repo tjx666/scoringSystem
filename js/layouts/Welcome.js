@@ -13,9 +13,9 @@ export default class WelcomePage extends Component {
     render() {
         return (
             <View style={styles.welcomePage}>
-                <Text style={styles.title}>南昌高新区企业财务指标评分系统</Text>
+                <Text style={styles.title}>{'南昌高新区\n企业财务指标评分系统'}</Text>
                 <Image style={styles.logo} source={require('../common/image/welcome-page.png')} />
-                <Copyright />
+                <Copyright/>
             </View>
         )
     }
@@ -28,13 +28,15 @@ const styles = StyleSheet.create({
         paddingTop: 60,
         paddingBottom: 20,
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
         alignItems: 'center',
         backgroundColor: 'white',
     },
     title: {
+        textAlign: 'center',
         fontWeight: "900",
-        fontSize: 24,
+        fontSize: 22,
+        color: 'black'
     },
     logo: {
         width: 280,

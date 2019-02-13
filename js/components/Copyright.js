@@ -17,6 +17,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     words: {
-        fontSize: 16,
+        fontSize: 14,
     }
 });

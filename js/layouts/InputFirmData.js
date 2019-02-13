@@ -1,16 +1,38 @@
 import React, { Component } from 'react';
 import { Text, StyleSheet, View, ScrollView, TextInput, Alert, Keyboard } from 'react-native';
 import Divider from '../components/Divider';
-import Copyright from '../components/Copyright';
 import Toast from 'react-native-root-toast';
 import Button from 'react-native-button';
 import { average, fix } from '../utils/math';
+import CONFIG from '../constans/config'
 import Logger from '../utils/log';
 const logger = new Logger();
 
 const InputFirmContext = React.createContext();
 
 class InputItem extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            color: '#AAAAAA'
+        }
+    }
+
+    _handleFocus = __ => {
+        this.setState({
+            ...this.state,
+            color: 'black'
+        })
+    }
+
+    _handleBlur = __ => {
+        this.setState({
+            ...this.state,
+            color: '#AAAAAA'
+        })
+    }
+
     render() {
         return (
             <View style={styles.inputItem}>
@@ -21,31 +43,45 @@ class InputItem extends Component {
                             <TextInput
                                 style={styles.itemInput}
                                 onChangeText={newValue => {
-                                    onChangeText(this.props.name, newValue);
+                                    onChangeText(this.props.name, newValue.trim());
                                 }}
                                 clearButtonMode={'while-editing'}
                                 enablesReturnKeyAutomatically={true}
                                 keyboardType={'numeric'}
                                 value={values[this.props.name]}
                                 selectionColor={'gray'}
+                                multiline={true}
+                                numberOfLines={1}
+                                textAlign={'left'}
+                                onFocus={this._handleFocus}
+                                onBlur={this._handleBlur}
                             />
                         )
                     }
                 </InputFirmContext.Consumer>
+                {this._renderPercentSign()}
             </View>
         )
+    }
+
+    _renderPercentSign = __ => {
+        return this.props.showPercentSign && <Text style={{
+            ...styles.percentSign,
+            color: this.state.color
+        }}>%</Text>
     }
 }
 
 class InputSection extends Component {
     _renderItems = items => {
         return items.map(item => {
-            const { name, desc } = item;
+            const { name, desc, showPercentSign } = item;
             return (
                 <InputItem
                     key={name}
                     name={name}
                     desc={desc}
+                    showPercentSign={showPercentSign}
                 />
             )
         });
@@ -73,10 +109,12 @@ export default class InputFirmData extends Component {
                 {
                     name: 'currentRatio',
                     desc: '流动比率',
+                    showPercentSign: false
                 },
                 {
                     name: 'assetsAndLiabilityRate',
                     desc: '资产负债率',
+                    showPercentSign: true
                 },
             ]
         },
@@ -85,15 +123,18 @@ export default class InputFirmData extends Component {
             items: [
                 {
                     name: 'inventoryTurnover',
-                    desc: '存货周期率'
+                    desc: '存货周期率',
+                    showPercentSign: false
                 },
                 {
                     name: 'accountReceivableTurnover',
-                    desc: '应收账款周转率'
+                    desc: '应收账款周转率',
+                    showPercentSign: false
                 },
                 {
                     name: 'totalAssetsTurnover',
-                    desc: '总资产周转率'
+                    desc: '总资产周转率',
+                    showPercentSign: false
                 }
             ]
         },
@@ -102,11 +143,13 @@ export default class InputFirmData extends Component {
             items: [
                 {
                     name: 'grossProfitRate',
-                    desc: '毛利率'
+                    desc: '毛利率',
+                    showPercentSign: true
                 },
                 {
                     name: 'roe',
-                    desc: '净资产收益率'
+                    desc: '净资产收益率',
+                    showPercentSign: true
                 }
             ]
         },
@@ -115,11 +158,13 @@ export default class InputFirmData extends Component {
             items: [
                 {
                     name: 'operationIncomeGrowthRate',
-                    desc: '营业收入增长率'
+                    desc: '营业收入增长率',
+                    showPercentSign: true
                 },
                 {
                     name: 'netProfitGrowthRate',
-                    desc: '净利润增长率'
+                    desc: '净利润增长率',
+                    showPercentSign: true
                 }
             ]
         },
@@ -128,7 +173,8 @@ export default class InputFirmData extends Component {
             items: [
                 {
                     name: 'netProfitCashRatio',
-                    desc: '净利润现金比率'
+                    desc: '净利润现金比率',
+                    showPercentSign: true
                 }
             ]
         }
@@ -167,6 +213,12 @@ export default class InputFirmData extends Component {
     }
 
     _parseFirmData = (stringFirmData) => {
+        for (const key in stringFirmData) {
+            if (stringFirmData[key].trim() === '') {
+                stringFirmData[key] = '0';
+            }
+        }
+
         const parsedFirmData = Object.values(stringFirmData).map(stringValue => {
             const numberData = Number.parseFloat(stringValue) * 10;
             return Math.min(numberData, 15);
@@ -216,17 +268,6 @@ export default class InputFirmData extends Component {
                         },
                         {
                             text: '继续', onPress: () => {
-                                let updatedState = {};
-                                for (const key in firmData) {
-                                    if (firmData[key].trim() === '') {
-                                        updatedState[key] = '0';
-                                    }
-                                }
-                                this.setState({
-                                    ...this.state,
-                                    ...updatedState
-                                });
-
                                 setTimeout(__ => {
                                     const params = this._parseFirmData(this.state);
                                     this.props.navigation.navigate('Charts', params)
@@ -254,6 +295,18 @@ export default class InputFirmData extends Component {
                 keyboardShouldPersistTaps={'always'}
                 keyboardDismissMode="on-drag"
             >
+                <Text style={styles.title}>公司名</Text>
+                <TextInput
+                    style={{
+                        width: '90%',
+                        alignSelf: 'center',
+                        borderBottomWidth: 1,
+                        borderBottomColor: 'rgba(128, 128, 128, 0.6)',
+                        fontSize: 20,
+                    }}
+                    selectionColor={'gray'}
+                >
+                </TextInput>
                 <Text style={styles.title}>请输入以下财务指标</Text>
                 <InputFirmContext.Provider
                     value={{
@@ -272,7 +325,6 @@ export default class InputFirmData extends Component {
                         确定
                     </Button>
                 </View>
-                <Copyright />
             </ScrollView>
         )
     }
@@ -305,6 +357,8 @@ const styles = StyleSheet.create({
         color: 'black'
     },
     sectionList: {
+        width: "90%",
+        alignSelf: 'center',
         marginBottom: 20
     },
     section: {
@@ -321,13 +375,12 @@ const styles = StyleSheet.create({
         color: '#444444'
     },
     sectionHeaderDivider: {
-        marginBottom: 15,
+        marginBottom: 20,
         borderBottomColor: 'rgba(128, 128, 128, 0.1)'
     },
     inputItem: {
         height: 40,
-        paddingLeft: 60,
-        paddingRight: 80,
+        paddingLeft: 50,
         flexDirection: 'row',
         alignItems: 'center'
     },
@@ -336,15 +389,19 @@ const styles = StyleSheet.create({
         color: '#555555'
     },
     itemInput: {
-        flex: 1,
+        width: 120,
         borderBottomWidth: 1,
         borderBottomColor: 'rgba(128, 128, 128, 0.6)',
         fontSize: 18,
     },
     submitButtonContainer: {
         width: 80,
-        marginBottom: 20,
+        marginTop: -15,
+        marginBottom: 40,
         alignSelf: 'center',
         borderRadius: 50
+    },
+    percentSign: {
+        fontSize: 18,
     }
 })
