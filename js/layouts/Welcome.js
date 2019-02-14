@@ -6,7 +6,6 @@ export default class WelcomePage extends Component {
     componentDidMount() {
         setTimeout(__ => {
             this.props.navigation.replace('InputFirmData');
-            // this.props.navigation.navigate('Charts')
         }, 1500);
     }
 
@@ -34,6 +33,7 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign: 'center',
+        fontFamily: '思源黑体',
         fontWeight: "900",
         fontSize: 22,
         color: 'black'

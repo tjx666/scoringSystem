@@ -822,6 +822,14 @@ aproba@^1.0.3:
   resolved "https://registry.yarnpkg.com/aproba/-/aproba-1.2.0.tgz#6802e6264efd18c790a1b0d517f0f2627bf2c94a"
   integrity sha512-Y9J6ZjXtoYh8RnXVCMOU/ttDmk1aBjunq9vO0ta5x85WDQiQfUF9sIPBITdbiiIVcBo03Hi3jMxigBtsddlXRw==
 
+apsl-react-native-button@^3.1.1:
+  version "3.1.1"
+  resolved "http://registry.npm.taobao.org/apsl-react-native-button/download/apsl-react-native-button-3.1.1.tgz#313764d84cd9a429d14b329db6639b2c683266a7"
+  integrity sha1-MTdk2EzZpCnRSzKdtmObLGgyZqc=
+  dependencies:
+    lodash.isequal "^4.1.4"
+    prop-types "^15.5.10"
+
 archy@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/archy/download/archy-1.0.0.tgz#f9c8c13757cc1dd7bc379ac77b2c62a5c2868c40"
@@ -4072,6 +4080,11 @@ locate-path@^3.0.0:
     p-locate "^3.0.0"
     path-exists "^3.0.0"
 
+lodash.isequal@^4.1.4:
+  version "4.5.0"
+  resolved "http://registry.npm.taobao.org/lodash.isequal/download/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+  integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
+
 lodash.pad@^4.1.0:
   version "4.5.1"
   resolved "https://registry.yarnpkg.com/lodash.pad/-/lodash.pad-4.5.1.tgz#4330949a833a7c8da22cc20f6a26c4d59debba70"
@@ -4102,7 +4115,7 @@ lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.5, lodash@^4.3.0, lodash@^4.6.1:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
 
-loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.3.1:
+loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.3.1, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
@@ -5376,6 +5389,15 @@ prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.1, prop-types@^15.6.2:
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
 
+prop-types@^15.5.7, prop-types@^15.6.0:
+  version "15.7.2"
+  resolved "http://registry.npm.taobao.org/prop-types/download/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
+  integrity sha1-UsQedbjIfnK52TYOAga5ncv/psU=
+  dependencies:
+    loose-envify "^1.4.0"
+    object-assign "^4.1.1"
+    react-is "^16.8.1"
+
 pseudomap@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/pseudomap/-/pseudomap-1.0.2.tgz#f052a28da70e618917ef0a8ac34c1ae5a68286b3"
@@ -5476,7 +5498,7 @@ react-devtools-core@^3.4.2:
     shell-quote "^1.6.1"
     ws "^3.3.1"
 
-react-is@^16.5.2, react-is@^16.6.3, react-is@^16.7.0:
+react-is@^16.5.2, react-is@^16.6.3, react-is@^16.7.0, react-is@^16.8.1:
   version "16.8.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.1.tgz#a80141e246eb894824fb4f2901c0c50ef31d4cdb"
   integrity sha512-ioMCzVDWvCvKD8eeT+iukyWrBGrA3DiFYkXfBsVYIRdaREZuBjENG+KjrikavCLasozqRWTwFUagU/O4vPpRMA==
@@ -5486,12 +5508,27 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-native-awesome-alert@^0.4.0:
+  version "0.4.0"
+  resolved "http://registry.npm.taobao.org/react-native-awesome-alert/download/react-native-awesome-alert-0.4.0.tgz#b6aed8d5bb20d757235f981f0d599b3c596e8db7"
+  integrity sha1-tq7Y1bsg11cjX5gfDVmbPFlujbc=
+  dependencies:
+    prop-types "^15.6.0"
+    react-native-check-box "^2.0.2"
+
 react-native-button@^2.3.0:
   version "2.3.0"
   resolved "http://registry.npm.taobao.org/react-native-button/download/react-native-button-2.3.0.tgz#7d0a90095d415b0edf98a904556a7c4439646568"
   integrity sha1-fQqQCV1BWw7fmKkEVWp8RDlkZWg=
   dependencies:
     prop-types "^15.5.10"
+
+react-native-check-box@^2.0.2:
+  version "2.1.7"
+  resolved "http://registry.npm.taobao.org/react-native-check-box/download/react-native-check-box-2.1.7.tgz#f349d3505a13c15d19949ec4cec40c7adc4f3626"
+  integrity sha1-80nTUFoTwV0ZlJ7EzsQMetxPNiY=
+  dependencies:
+    prop-types "^15.5.7"
 
 react-native-gesture-handler@^1.0.15, react-native-gesture-handler@~1.0.14:
   version "1.0.15"
@@ -5512,8 +5549,8 @@ react-native-root-siblings@^3.0.0:
 
 react-native-root-toast@^3.0.2:
   version "3.0.2"
-  resolved "https://registry.yarnpkg.com/react-native-root-toast/-/react-native-root-toast-3.0.2.tgz#85c0c50d300c895a35ea98587b4ad4c9540297ee"
-  integrity sha512-I3yJkfFP7yEBRBiJAToQgPtxZwf+8j60KDPN3nOYSg9Nfqldq6VwIC4Pgq6Wt8XgqpSuIBtwGYfpc5JS8TxFeg==
+  resolved "http://registry.npm.taobao.org/react-native-root-toast/download/react-native-root-toast-3.0.2.tgz#85c0c50d300c895a35ea98587b4ad4c9540297ee"
+  integrity sha1-hcDFDTAMiVo16phYe0rUyVQCl+4=
   dependencies:
     prop-types "^15.5.10"
     react-native-root-siblings "^3.0.0"
