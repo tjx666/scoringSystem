@@ -1,11 +1,16 @@
 import React, { Component } from 'react'
 import { WebView, StyleSheet, Platform, Alert } from 'react-native'
 import Logger from '../utils/log';
+import {fix} from '../utils/math';
 const logger = new Logger();
 
 export default class Charts extends Component {
+    static navigationOptions = {
+        title: '企业评分',
+    };
+
     _getRadarOptions = __ => {
-        const params = this.props.navigation.state.params;
+        const { params } = this.props.navigation.state;
 
         return {
             title: {
@@ -54,6 +59,7 @@ export default class Charts extends Component {
     }
 
     _renderRadar = __ => {
+        const { params } = this.props.navigation.state;
         const options = this._getRadarOptions();
         const totalScore = options.series[0].data[0].value.reduce((f, b) => f + b);
 
@@ -62,7 +68,8 @@ export default class Charts extends Component {
             const container = document.querySelector('#some-firm-radar');
             const chart = echarts.init(container, null, { renderer: 'canvas' });
             chart.setOption(${JSON.stringify(options)});
-            document.querySelector('body > div:nth-child(2) > span.total-score').innerText = '总分: ${totalScore}分'
+            document.querySelector('body > div:nth-child(1) > span.total-score').innerText = '总分: ${fix(totalScore)}分';
+            document.querySelector('body > div:nth-child(1) > span.title').innerText = '${params.firmName}';
         }();
         `;
     }
@@ -70,11 +77,12 @@ export default class Charts extends Component {
     render() {
 
         const src = Platform.OS === 'ios'
-            ? require('../common/html/charts.mini.html')
+            ? require('../common/html/charts.min.html')
             : { uri: 'file:///android_asset/html/charts.mini.html', baseUrl: 'file:///android_asset/' }
 
         return (
             <WebView
+                scrollEnabled={false}
                 originWhitelist={['*']}
                 source={src}
                 injectedJavaScript={this._renderRadar()}

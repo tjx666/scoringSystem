@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TextInput, } from 'react-native'
+import { View, Text, StyleSheet, TextInput, } from 'react-native';
+import Toast from 'react-native-root-toast';
+import CONFIG from '../constans/config';
 import Logger from '../utils/log';
+import { StringUtil } from '../utils/language';
+import { fix } from '../utils/math';
+
 const logger = new Logger();
 
 export default class container extends Component {
@@ -9,7 +14,8 @@ export default class container extends Component {
 
         this.state = {
             showClearButton: false,
-            value: ''
+            value: '',
+            textColor: 'black'
         }
     }
 
@@ -37,6 +43,11 @@ export default class container extends Component {
             showClearButton: false
         }, __ => {
             this.props.onChangeText(this.props.name, '');
+            if (this.state.textColor === 'red') {
+                this.setState({
+                    textColor: 'black'
+                })
+            }
         })
     }
 
@@ -45,13 +56,78 @@ export default class container extends Component {
             ...this.state,
             value: newValue,
         }, __ => {
-            this.setState({
-                ...this.state,
-                showClearButton: this.state.value !== ''
-            });
+            this.props.onChangeText(this.props.name, newValue.trim());
+            if (newValue === '') {
+                this.setState({
+                    ...this.state,
+                    showClearButton: false
+                });
+            } else {
+                if (!this.state.showClearButton) {
+                    this.setState({
+                        ...this.state,
+                        showClearButton: true
+                    });
+                }
+            }
 
-            this.props.onChangeText(this.props.name, newValue);
+            if (this.props.name !== 'firmName') {
+                if (!this._validate(newValue)) {
+                    this.setState({
+                        ...this.state,
+                        textColor: 'red'
+                    })
+                } else {
+                    if (this.state.textColor === 'red') {
+                        this.setState({
+                            ...this.state,
+                            textColor: 'black'
+                        })
+                    }
+                }
+            }
         });
+    }
+
+    _validate = inputValue => {
+        if (inputValue.trim() === '') return true;
+
+        if (!/\d+\./ && !StringUtil.isNumberStr(inputValue)) {
+            Toast.show(`输入值不是一个合法的数字!${inputValue}`, {
+                duration: Toast.durations.SHORT,
+                position: Toast.positions.BOTTOM,
+                shadow: true,
+                animation: true,
+                hideOnPress: true,
+                backgroundColor: 'gray',
+                textEmphasisColor: 'white',
+                delay: 0,
+            });
+            return false;
+        }
+
+        const { hint } = this.props;
+        const numberHint = hint.endsWith('%')
+            ? Number.parseFloat(hint.slice(0, hint.length - 1))
+            : Number.parseFloat(hint);
+
+        const inputNumber = Number.parseFloat(inputValue);
+        const maxInputNumber = CONFIG.maxScore / CONFIG.ofilmScore * numberHint;
+
+        if (inputNumber > maxInputNumber) {
+            Toast.show(`超出最大值${fix(maxInputNumber)}!`, {
+                duration: Toast.durations.LONG,
+                position: Toast.positions.TOP,
+                shadow: true,
+                animation: true,
+                hideOnPress: true,
+                backgroundColor: 'gray',
+                textEmphasisColor: 'white',
+                delay: 0,
+            });
+            return false;
+        }
+        return true;
     }
 
     render() {
@@ -60,14 +136,13 @@ export default class container extends Component {
                 <Text style={styles.itemDesc}>{this.props.desc}</Text>
                 <TextInput
                     ref={this.props.name}
-                    style={styles.itemInput}
+                    style={{ ...styles.itemInput, color: this.state.textColor }}
+                    value={this.state.value}
                     placeholder={this.props.hint && `参考值: ${this.props.hint}`}
                     keyboardType='numeric'
-                    selectionColor='gray'
                     onFocus={this._handleFocus}
                     onBlur={this._handleBlur}
                     onChangeText={this._handleChangeText}
-                    value={this.state.value}
                 />
                 {this._renderClearButton()}
             </View>
@@ -79,8 +154,9 @@ export default class container extends Component {
             return (
                 <Text
                     style={{
-                        fontSize: 18,
-                        color: 'gray'
+                        fontSize: 20,
+                        color: 'gray',
+                        fontWeight: 'bold'
                     }}
                     onPress={this._handleClear}
                 >
@@ -102,13 +178,14 @@ const styles = StyleSheet.create({
         borderBottomColor: '#666666'
     },
     itemDesc: {
-        width: 100,
+        width: 110,
         marginLeft: 2,
         fontFamily: '思源黑体',
-        fontSize: 14,
+        fontSize: 15,
         color: '#666666'
     },
     itemInput: {
         flex: 1,
+        fontSize: 14
     }
 })

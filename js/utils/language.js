@@ -6,3 +6,5 @@ export const StringUtil = {
         return /^\d+(\.\d+)?$/.test(numberStr);
     }
 }
+
+// console.log(StringUtil.isNumberStr('22.1'))

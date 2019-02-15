@@ -6,10 +6,11 @@ import Toast from 'react-native-root-toast';
 import CheckAlert from "react-native-awesome-alert";
 import DropdownAlert from 'react-native-dropdownalert';
 import Logger from '../utils/log';
-const logger = new Logger();
 import CONFIG from '../constans/config';
 import { fix, average } from '../utils/math';
 import { StringUtil } from '../utils/language';
+
+const logger = new Logger();
 
 export default class InputFirmData extends Component {
     static sectionListData = [
@@ -140,10 +141,29 @@ export default class InputFirmData extends Component {
         return null;
     }
 
+    _getSortedNumberFirmData = firmData => {
+        const keys = [
+            'currentRatio',
+            'assetsAndLiabilityRate',
+            'inventoryTurnover',
+            'accountReceivableTurnover',
+            'totalAssetsTurnover',
+            'grossProfitRate',
+            'roe',
+            'operationIncomeGrowthRate',
+            'netProfitGrowthRate',
+            'netProfitCashRatio'
+        ]
+        const sortedNumberFirmData = {};
+        for (const key of keys) {
+            sortedNumberFirmData[key] = firmData[key]
+        }
+        return sortedNumberFirmData;
+    }
+
     _getParams = firmData => {
-        const params = { firmName: firmData.name };
-        const numberStrFirmData = { ...firmData };
-        delete numberStrFirmData.firmName;
+        const params = {firmName: firmData.firmName}
+        const numberStrFirmData = this._getSortedNumberFirmData(firmData);
         const numberDataArray = [];
 
         for (const [key, value] of Object.entries(numberStrFirmData)) {
@@ -151,7 +171,7 @@ export default class InputFirmData extends Component {
             const inputValue = value.trim() !== '' ? Number.parseFloat(value) : 0;
 
             if (hint.endsWith('%')) hint = hint.slice(0, hint.length - 1);
-            numberDataArray.push(inputValue / Number.parseFloat(hint) * CONFIG.ofilmScore);
+            numberDataArray.push(Math.min(CONFIG.maxScore, inputValue / Number.parseFloat(hint) * CONFIG.ofilmScore));
         }
 
         params.values = [
@@ -161,25 +181,26 @@ export default class InputFirmData extends Component {
             numberDataArray.slice(7, 9),
             numberDataArray.slice(9, 10)
         ].map(param => fix(average(param)))
+
+        // logger.debug(params);
         return params;
     }
 
     _handleSubmit = __ => {
-        const numberStrFirmData = { ...this.state.firmData };
-        delete numberStrFirmData.firmName;
-        // logger.debug(JSON.stringify(numberStrFirmData, null, '  '));
+        // logger.debug(this.state.firmData);
+        const numberStrFirmData = this._getSortedNumberFirmData(this.state.firmData);
 
         for (const [key, value] of Object.entries(numberStrFirmData)) {
             const desc = this._getValueFromItem('desc', key);
 
-            if (value.trim() !== '' && !StringUtil.isNumberStr(value)) {
+            if (value !== '' && !StringUtil.isNumberStr(value)) {
                 Toast.show(`${desc}的输入值不是一个合法的数字! 请修改${desc}!`, {
-                    duration: Toast.durations.SHORT,
-                    position: Toast.positions.BOTTOM,
+                    duration: Toast.durations.LONG,
+                    position: 0,// Toast.positions.BOTTOM
                     shadow: true,
                     animation: true,
                     hideOnPress: true,
-                    backgroundColor: 'red',
+                    backgroundColor: 'gray',
                     textEmphasisColor: 'white',
                     delay: 0,
                 });
@@ -190,24 +211,17 @@ export default class InputFirmData extends Component {
         for (const [key, value] of Object.entries(numberStrFirmData)) {
             const desc = this._getValueFromItem('desc', key);
 
-            if (value.trim() === '') {
-                
-                this.awesomeAlert.neverAskAlert(
-                    `${desc}项未输入！`,
-                    this._renderNeverAskView('点击继续将视所有未输入的项值为 0，是否继续?'),
-                    [
-                        { text: "返回", onPress: () => { }, id: 'checkAlertId' },
-                        {
-                            text: "继续", onPress: () => {
-                                setTimeout(__ => {
-                                    const params = this._getParams(this.state.firmData);
-                                    this.props.navigation.navigate('Charts', params)
-                                }, 500);
-                            }
-                        }
-                    ],
-                    "不要再询问我"
-                )
+            if (value === '') {
+                Toast.show(`${desc}未输入!`, {
+                    duration: Toast.durations.LONG,
+                    position: 0,// Toast.positions.BOTTOM
+                    shadow: true,
+                    animation: true,
+                    hideOnPress: true,
+                    backgroundColor: 'gray',
+                    textEmphasisColor: 'white',
+                    delay: 0,
+                });
                 return;
             }
         }
@@ -333,9 +347,12 @@ const styles = StyleSheet.create({
         height: 60,
         paddingHorizontal: 9,
         fontFamily: '黑体',
+        textAlign: 'left',
     },
     alertDetail: {
-        textAlign: 'left'
+        fontSize: 16,
+        textAlign: 'left',
+        color: '#444444',
     }
 })
 
@@ -352,7 +369,7 @@ const alertStyles = {
     modalView: {
         backgroundColor: 'white',
         borderRadius: 6,
-        width: 275,
+        width: 280,
         borderColor: 'black',
         borderWidth: StyleSheet.hairlineWidth
     },
@@ -371,7 +388,9 @@ const alertStyles = {
         fontSize: 17,
         fontWeight: '600',
         padding: 15,
-        alignSelf: 'center'
+        alignSelf: 'center',
+        color: 'black',
+        fontWeight: '600'
     },
     buttonContainer: {
         height: 40,
