@@ -5,7 +5,7 @@ const logger = new Logger();
 
 export default class Charts extends Component {
     _getRadarOptions = __ => {
-        const firmData = this.props.navigation.state.params;
+        const params = this.props.navigation.state.params;
 
         return {
             title: {
@@ -39,7 +39,7 @@ export default class Charts extends Component {
                 type: 'radar',
                 data: [
                     {
-                        value: firmData,
+                        value: params.values,
                         name: '该公司得分',
                         lineStyle: {
                             color: 'blue'

@@ -31,7 +31,13 @@ export default class container extends Component {
 
     _handleClear = __ => {
         const { name } = this.props;
-        this.refs[name].clear();
+        this.setState({
+            ...this.state,
+            value: '',
+            showClearButton: false
+        }, __ => {
+            this.props.onChangeText(this.props.name, '');
+        })
     }
 
     _handleChangeText = newValue => {

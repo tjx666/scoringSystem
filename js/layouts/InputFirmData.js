@@ -4,21 +4,12 @@ import InputItem from '../components/InputItem';
 import Button from 'apsl-react-native-button';
 import Toast from 'react-native-root-toast';
 import CheckAlert from "react-native-awesome-alert";
+import DropdownAlert from 'react-native-dropdownalert';
 import Logger from '../utils/log';
 const logger = new Logger();
-
-const NeverAskView = (
-    <View style={styles.sampleView}>
-        <Text
-            style={{
-
-            }}
-        >
-            {}
-        </Text>
-    </View>
-)
-
+import CONFIG from '../constans/config';
+import { fix, average } from '../utils/math';
+import { StringUtil } from '../utils/language';
 
 export default class InputFirmData extends Component {
     static sectionListData = [
@@ -139,14 +130,38 @@ export default class InputFirmData extends Component {
         });
     }
 
-    _getDescOfItem = name => {
+    _getValueFromItem = (key, name) => {
         for (const bigCategory of InputFirmData.sectionListData) {
             for (const item of bigCategory.items) {
-                if (item.name === name) return item.desc;
+                if (item.name === name) return item[key];
             }
         }
 
         return null;
+    }
+
+    _getParams = firmData => {
+        const params = { firmName: firmData.name };
+        const numberStrFirmData = { ...firmData };
+        delete numberStrFirmData.firmName;
+        const numberDataArray = [];
+
+        for (const [key, value] of Object.entries(numberStrFirmData)) {
+            let hint = this._getValueFromItem('hint', key);
+            const inputValue = value.trim() !== '' ? Number.parseFloat(value) : 0;
+
+            if (hint.endsWith('%')) hint = hint.slice(0, hint.length - 1);
+            numberDataArray.push(inputValue / Number.parseFloat(hint) * CONFIG.ofilmScore);
+        }
+
+        params.values = [
+            numberDataArray.slice(0, 2),
+            numberDataArray.slice(2, 5),
+            numberDataArray.slice(5, 7),
+            numberDataArray.slice(7, 9),
+            numberDataArray.slice(9, 10)
+        ].map(param => fix(average(param)))
+        return params;
     }
 
     _handleSubmit = __ => {
@@ -155,9 +170,9 @@ export default class InputFirmData extends Component {
         // logger.debug(JSON.stringify(numberStrFirmData, null, '  '));
 
         for (const [key, value] of Object.entries(numberStrFirmData)) {
-            const desc = this._getDescOfItem(key);
+            const desc = this._getValueFromItem('desc', key);
 
-            if (value.trim() !== '' && !/^\d+(\.\d+)?$/.test(value)) {
+            if (value.trim() !== '' && !StringUtil.isNumberStr(value)) {
                 Toast.show(`${desc}的输入值不是一个合法的数字! 请修改${desc}!`, {
                     duration: Toast.durations.SHORT,
                     position: Toast.positions.BOTTOM,
@@ -171,6 +186,36 @@ export default class InputFirmData extends Component {
                 return;
             }
         }
+
+        for (const [key, value] of Object.entries(numberStrFirmData)) {
+            const desc = this._getValueFromItem('desc', key);
+
+            if (value.trim() === '') {
+                
+                this.awesomeAlert.neverAskAlert(
+                    `${desc}项未输入！`,
+                    this._renderNeverAskView('点击继续将视所有未输入的项值为 0，是否继续?'),
+                    [
+                        { text: "返回", onPress: () => { }, id: 'checkAlertId' },
+                        {
+                            text: "继续", onPress: () => {
+                                setTimeout(__ => {
+                                    const params = this._getParams(this.state.firmData);
+                                    this.props.navigation.navigate('Charts', params)
+                                }, 500);
+                            }
+                        }
+                    ],
+                    "不要再询问我"
+                )
+                return;
+            }
+        }
+
+        setTimeout(__ => {
+            const params = this._getParams(this.state.firmData);
+            this.props.navigation.navigate('Charts', params)
+        }, 500);
     }
 
     render() {
@@ -181,6 +226,15 @@ export default class InputFirmData extends Component {
                 keyboardShouldPersistTaps={'always'}
                 keyboardDismissMode="on-drag"
             >
+                <CheckAlert
+                    styles={alertStyles}
+                    ref={ref => (this.awesomeAlert = ref)}
+                    modalProps={{
+                        transparent: true,
+                        animationType: "slide",
+                    }}
+                    checkBoxColor="black"
+                />
                 {this._renderSectionList(InputFirmData.sectionListData)}
                 <Button
                     style={{
@@ -201,6 +255,7 @@ export default class InputFirmData extends Component {
                 >
                     确认
                 </Button>
+                <DropdownAlert ref={ref => this.dropdown = ref} />
             </ScrollView>
         )
     }
@@ -236,6 +291,14 @@ export default class InputFirmData extends Component {
             </View>
         )
     }
+
+    _renderNeverAskView = desc => {
+        return (
+            <View style={styles.alertDetailView}>
+                <Text style={styles.alertDetail}> {desc}</Text>
+            </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
@@ -250,7 +313,7 @@ const styles = StyleSheet.create({
     section: {
         alignItems: 'center',
         backgroundColor: 'white',
-        marginVertical: 10,
+        marginVertical: 8,
         paddingBottom: 20,
         borderRadius: 5,
         elevation: 6
@@ -266,4 +329,65 @@ const styles = StyleSheet.create({
         lineHeight: 45,
         fontFamily: '方正中宋'
     },
+    alertDetailView: {
+        height: 60,
+        paddingHorizontal: 9,
+        fontFamily: '黑体',
+    },
+    alertDetail: {
+        textAlign: 'left'
+    }
 })
+
+const alertStyles = {
+    container: {
+        flex: 1
+    },
+    modalContainer: {
+        flex: 1,
+        backgroundColor: 'rgba(100,100,100, 0.7)',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    modalView: {
+        backgroundColor: 'white',
+        borderRadius: 6,
+        width: 275,
+        borderColor: 'black',
+        borderWidth: StyleSheet.hairlineWidth
+    },
+    checkBox: {
+        marginBottom: 10,
+        paddingLeft: 5
+    },
+    checkBoxText: {
+        marginLeft: 4,
+        alignSelf: 'center',
+        fontSize: 15,
+        justifyContent: 'center'
+    },
+    titleText: {
+        fontFamily: '方正中宋',
+        fontSize: 17,
+        fontWeight: '600',
+        padding: 15,
+        alignSelf: 'center'
+    },
+    buttonContainer: {
+        height: 40,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        borderColor: 'gray',
+        borderTopWidth: StyleSheet.hairlineWidth
+    },
+    buttonText: {
+        fontSize: 17,
+        fontWeight: 'bold'
+    },
+    button: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 15,
+        borderColor: 'gray'
+    }
+}
