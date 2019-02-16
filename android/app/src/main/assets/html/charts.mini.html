@@ -8,11 +8,11 @@
     <title>欧菲科技和与其比较的公司的雷达图</title>
     <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.js"></script>
     <style>
-        *{
+        * {
             margin: 0;
             padding: 0;
         }
-        
+
         body {
             display: flex;
             flex-direction: column;
@@ -51,7 +51,7 @@
         #some-firm-radar {
             width: 100vw;
             height: 35vh;
-           margin-top: 10px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -106,6 +106,12 @@
                         {
                             value: [10, 10, 10, 10, 10],
                             name: '欧菲科技得分',
+                            label: {
+                                normal: {
+                                    show: true,
+                                }
+                            }
+
                         }
                     ],
                 }]

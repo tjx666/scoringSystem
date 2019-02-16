@@ -182,7 +182,6 @@ export default class InputFirmData extends Component {
             numberDataArray.slice(9, 10)
         ].map(param => fix(average(param)))
 
-        // logger.debug(params);
         return params;
     }
 
@@ -213,8 +212,8 @@ export default class InputFirmData extends Component {
 
             if (value === '') {
                 Toast.show(`${desc}未输入!`, {
-                    duration: Toast.durations.LONG,
-                    position: 0,// Toast.positions.BOTTOM
+                    duration: Toast.durations.SHORT,
+                    position: Toast.positions.BOTTOM,// Toast.positions.BOTTOM
                     shadow: true,
                     animation: true,
                     hideOnPress: true,
@@ -222,7 +221,7 @@ export default class InputFirmData extends Component {
                     textEmphasisColor: 'white',
                     delay: 0,
                 });
-                return;
+                break;
             }
         }
 

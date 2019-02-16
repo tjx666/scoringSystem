@@ -40,12 +40,17 @@ export default class Charts extends Component {
                 ]
             },
             series: [{
-                name: '该公司',
+                name: params.firmName,
                 type: 'radar',
                 data: [
                     {
                         value: params.values,
                         name: '该公司得分',
+                        label: {
+                            normal: {
+                                show: true,
+                            }
+                        },
                         lineStyle: {
                             color: 'blue'
                         },

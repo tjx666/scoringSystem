@@ -72,7 +72,7 @@ export default class container extends Component {
             }
 
             if (this.props.name !== 'firmName') {
-                if (!this._validate(newValue)) {
+                if (!this._validate(newValue.trim())) {
                     this.setState({
                         ...this.state,
                         textColor: 'red'
@@ -90,12 +90,12 @@ export default class container extends Component {
     }
 
     _validate = inputValue => {
-        if (inputValue.trim() === '') return true;
+        if (inputValue === '') return true;
 
-        if (!/\d+\./ && !StringUtil.isNumberStr(inputValue)) {
+        if (!/\d+\.$/.test(inputValue) && !StringUtil.isNumberStr(inputValue)) {
             Toast.show(`输入值不是一个合法的数字!${inputValue}`, {
                 duration: Toast.durations.SHORT,
-                position: Toast.positions.BOTTOM,
+                position: Toast.positions.TOP,
                 shadow: true,
                 animation: true,
                 hideOnPress: true,
