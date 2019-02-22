@@ -130,6 +130,7 @@ export default class container extends Component {
         return true;
     }
 
+    // FIXME: 输入公司名称不需要数字键盘
     render() {
         return (
             <View style={styles.container}>

@@ -4,7 +4,6 @@ import InputItem from '../components/InputItem';
 import Button from 'apsl-react-native-button';
 import Toast from 'react-native-root-toast';
 import CheckAlert from "react-native-awesome-alert";
-import DropdownAlert from 'react-native-dropdownalert';
 import Logger from '../utils/log';
 import CONFIG from '../constans/config';
 import { fix, average } from '../utils/math';
@@ -268,7 +267,6 @@ export default class InputFirmData extends Component {
                 >
                     确认
                 </Button>
-                <DropdownAlert ref={ref => this.dropdown = ref} />
             </ScrollView>
         )
     }
